@@ -1,37 +1,26 @@
 import { useState } from "react";
 import { AsyncPaginate } from "react-select-async-paginate";
 import { GEO_API_URL, geoApiOptions } from "../../utils/api";
+import { City, CityOption } from "../../utils/typings";
 
 interface SearchProps {
   onSearchChange: (searchData: { value: string; label: string }) => void;
 }
 
-type CityOption = {
-  value: string;
-  label: string;
-}
 
-type City = {
-  latitude: string;
-  longitude: string;
-  name: string;
-  countryCode: string;
-}
 
 const Search = ({ onSearchChange }: SearchProps) => {
   const [search, setSearch] = useState<CityOption | null>(null);
 
-  const handleOnChange = (newValue: CityOption | null) => {
-    setSearch(newValue);
-    if (newValue) {
-      onSearchChange(newValue);
-    }
+  const handleOnChange = (searchData: CityOption | null) => {
+    setSearch(searchData);
+    onSearchChange(searchData!);
   };
 
   const loadOptions = async (inputValue: string) => {
     try {
       const response = await fetch(
-        `${GEO_API_URL}/cities?minPopulation=1000000&namePrefix=${inputValue}`,
+        `${GEO_API_URL}/cities?minPopulation=100000&namePrefix=${inputValue}`,
         geoApiOptions
       );
       const responseData = await response.json();
