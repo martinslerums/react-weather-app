@@ -30,7 +30,8 @@ const Location = () => {
       setLoading(true);
 
       try {
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        //This should be removed, added for ability to see spinner
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const currentWeatherResponse = await fetch(
           `${WEATHER_API_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}&units=metric`
