@@ -77,7 +77,7 @@ const CurrentWeather = ({ currentWeatherData }: CurrentWeatherProps) => {
             <div className="flex space-x-3">
               <StatCard
                 title="Wind Speed"
-                metric={`${currentWeatherData.wind.speed.toFixed(1)}m/s`}
+                metric={`${currentWeatherData.wind.speed.toFixed(1)}km/h`}
                 color="cyan"
               />
               <StatCard

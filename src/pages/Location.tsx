@@ -8,6 +8,8 @@ import InformationPanel from "../components/InformationPanel";
 import CurrentWeather from "../components/CurrentWeather";
 import Forecast from "../components/forecast/Forecast";
 
+import { PropagateLoader } from "react-spinners";
+
 const Location = () => {
   const { name, latitude, longitude } = useParams<City>();
 
@@ -28,6 +30,8 @@ const Location = () => {
       setLoading(true);
 
       try {
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+
         const currentWeatherResponse = await fetch(
           `${WEATHER_API_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}&units=metric`
         );
@@ -60,7 +64,15 @@ const Location = () => {
   }, [latitude, longitude, name]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-full h-screen">
+        <PropagateLoader
+          color="#183b7e"
+          loading={loading}
+          size={10}
+        />
+      </div>
+    );
   }
 
   if (error) {
