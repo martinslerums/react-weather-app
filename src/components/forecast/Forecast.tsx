@@ -27,8 +27,8 @@ const Forecast = ({ forecast }: ForecastProps) => {
               <AccordionItemButton>
                 <div className="daily_item">
                   <img
-                    src={`icons/${item.weather[0].icon}.png`}
-                    alt="weatther"
+                    src={`/icons/${item.weather[0].icon}.png`}
+                    alt="weather"
                     className="icon_small"
                   />
                   <label className="day">{forecastDays[index]}</label>

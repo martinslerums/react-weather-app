@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import CurrentWeather from "../components/CurrentWeather";
-import Forecast from "../components/forecast/Forecast";
+import { useParams } from "react-router-dom";
+
 import { WEATHER_API_URL, WEATHER_API_KEY } from "../utils/api";
 import { WeatherData, ForecastData, City } from "../utils/typings";
-import { useParams } from "react-router-dom";
+
 import InformationPanel from "../components/InformationPanel";
-// import Sidebar from "../components/sidebar/Sidebar";
+import CurrentWeather from "../components/CurrentWeather";
+import Forecast from "../components/forecast/Forecast";
 
 const Location = () => {
   const { name, latitude, longitude } = useParams<City>();
