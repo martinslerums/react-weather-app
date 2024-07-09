@@ -25,6 +25,14 @@ export type City = {
   name: string;
 };
 
+export type UVIndexData = {
+  timestamp: Date;
+  weather_description: string;
+  cloud_intensity: number;
+  latitude: number;
+};
+
+
 type Coord = {
   lon: number;
   lat: number;
