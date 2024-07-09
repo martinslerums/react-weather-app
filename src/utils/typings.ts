@@ -1,13 +1,28 @@
 export type CityOption = {
-  value: string;
+  value: {
+    latitude: string;
+    longitude: string;
+    countryCode: string;
+    name: string;
+    stateCode: string;
+  };
   label: string;
-};
+} | null;
+
+export type CountryOption = {
+  value: {
+    latitude: string;
+    longitude: string;
+    isoCode: string;
+  };
+  label: string;
+} | null;
+
 
 export type City = {
   latitude: string;
   longitude: string;
   name: string;
-  countryCode: string;
 };
 
 type Coord = {
