@@ -5,18 +5,22 @@ import { WeatherData } from "../utils/typings";
 import { getUVIndex } from "../utils/helper-functions/getUVIndex";
 import { getRandomNumber } from "../utils/helper-functions/getRandomNumber";
 import { getWindDirection } from "../utils/helper-functions/getWindDirection";
+import { UVIndexObject } from "../utils/helper-functions/getUVIndexDataObject";
 
 type CurrentWeatherProps = {
   currentWeatherData: WeatherData;
 };
 
 const CurrentWeather = ({ currentWeatherData }: CurrentWeatherProps) => {
-  if (!currentWeatherData) return <></>;
-
-  const UV_Index = getUVIndex(currentWeatherData);
-
   const number = getRandomNumber(3);
-  const windDirectionNamed = getWindDirection(currentWeatherData.wind.deg)
+  const windDirectionNamed = getWindDirection(currentWeatherData.wind.deg);
+
+  const UVIndexData = UVIndexObject(currentWeatherData)
+  const UV_Index = getUVIndex(UVIndexData);
+
+  if (!currentWeatherData) {
+    return <></>;
+  }
 
   return (
     <div>
@@ -34,22 +38,24 @@ const CurrentWeather = ({ currentWeatherData }: CurrentWeatherProps) => {
             <CalloutCard message="This is where GPT-4 Summary will go" />
           </div>
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 m-2">
-          <StatCard
+            <StatCard
               title="Feels like"
-              metric={`${(currentWeatherData.main.temp_min - number).toFixed(
-                1
-              )} °C`}
+              metric={`${currentWeatherData.main.feels_like.toFixed(1)} °C`}
               color="yellow"
             />
             <div className="flex space-x-3">
               <StatCard
                 title="Maximum Temperature"
-                metric={`${(currentWeatherData.main.temp_max + number).toFixed(1)} °C`}
+                metric={`${(currentWeatherData.main.temp_max + number).toFixed(
+                  1
+                )} °C`}
                 color="red"
               />
               <StatCard
                 title="Minimum Temperature"
-                metric={`${(currentWeatherData.main.temp_min - number).toFixed(1) } °C`}
+                metric={`${(currentWeatherData.main.temp_min - number).toFixed(
+                  1
+                )} °C`}
                 color="blue"
               />
             </div>
@@ -57,7 +63,7 @@ const CurrentWeather = ({ currentWeatherData }: CurrentWeatherProps) => {
             <div>
               <StatCard
                 title="UV Index"
-                metric={`${UV_Index.toFixed(1)} FIX`}
+                metric={UV_Index.toFixed(1)}
                 color={Number(UV_Index.toFixed(1)) > 5 ? "rose" : "green"}
               />
               {Number(UV_Index.toFixed(1)) > 5 && (
@@ -80,7 +86,6 @@ const CurrentWeather = ({ currentWeatherData }: CurrentWeatherProps) => {
                 color="violet"
               />
             </div>
-
           </div>
         </div>
         <hr className="mb-5" />
@@ -91,5 +96,3 @@ const CurrentWeather = ({ currentWeatherData }: CurrentWeatherProps) => {
 };
 
 export default CurrentWeather;
-
-
