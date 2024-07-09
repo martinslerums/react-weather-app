@@ -1,5 +1,3 @@
-body {
-  margin: 0;
-  font-family: "Roboto", Arial !important;
-  background-color: #d5d4d4;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
