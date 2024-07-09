@@ -1,40 +1,54 @@
-import { WeatherData } from "../typings";
+import { getHemisphere } from "./getHemisphere";
+import { getSeason, Season } from "./getSeason";
+import { getSkyCondition } from "./getSkyCondition";
 
-export const getUVIndex = (weather: WeatherData): number => {
-  const baseUVIndexSummer = 9;
-  const baseUVIndexSpringFall = 6;
-  const baseUVIndexWinter = 2;
+import { UVIndexData } from "../typings";
+interface BaseUVIndexObject {
+  Summer: number;
+  SpringOrFall: number;
+  Winter: number;
+}
+
+const baseUVIndexObject: BaseUVIndexObject = {
+  Summer: 9,
+  SpringOrFall: 6,
+  Winter: 2,
+};
+
+export const getUVIndex = (weather: UVIndexData): number => {
   let baseUVIndex = 0;
 
-  const date = new Date(weather.dt * 1000);
+  const date = weather.timestamp;
   const month = date.getMonth();
   const hour = date.getHours();
-  
-  // Determine the season
-  if (month >= 5 && month <= 8) {
-      baseUVIndex = baseUVIndexSummer;  // June to September
-  } else if (month >= 2 && month <= 4 || month === 9) {
-      baseUVIndex = baseUVIndexSpringFall;  // March to May and October
-  } else {
-      baseUVIndex = baseUVIndexWinter;  // November to February
+
+  const hemisphere = getHemisphere(weather.latitude);
+  const season = getSeason(month, hemisphere);
+
+  switch (season) {
+    case Season.Summer:
+      baseUVIndex = baseUVIndexObject.Summer;
+      break;
+    case Season.Spring:
+    case Season.Fall:
+      baseUVIndex = baseUVIndexObject.SpringOrFall;
+      break;
+    case Season.Winter:
+      baseUVIndex = baseUVIndexObject.Winter;
+      break;
+    default:
+      throw new Error("Invalid season");
   }
-  
-  // Adjust for time of day
+
   if (hour < 10 || hour > 14) {
-      baseUVIndex *= 0.5;  // Early morning or late afternoon
+    baseUVIndex *= 0.5;
   }
-  
-  // Adjust for sky conditions
-  const skyCondition = weather.weather[0].main.toLowerCase();
-  if (skyCondition === 'clear') {
-      // No adjustment needed for clear sky
-  } else if (skyCondition === 'clouds' && weather.clouds.all < 50) {
-      baseUVIndex *= 0.8;  // Partly cloudy
-  } else if (skyCondition === 'clouds' && weather.clouds.all >= 50) {
-      baseUVIndex *= 0.5;  // Mostly cloudy
-  } else {
-      baseUVIndex *= 0.3;  // Overcast
-  }
-  
-  return baseUVIndex;
-}
+
+  const adjustedUVIndex = getSkyCondition(
+    weather.weather_description,
+    weather.cloud_intensity,
+    baseUVIndex
+  );
+
+  return adjustedUVIndex;
+};
