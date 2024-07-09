@@ -5,19 +5,7 @@ afterEach(() => {
 });
 
 describe("getForecastDays", () => {
-  it("returns correct days starting from today", () => {
-    expect(getForecastDays()).toEqual([
-      "Saturday",
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-    ]);
-  });
-
-  it("returns correct days if fake timer used", () => {
+  it("returns correct days", () => {
     jest.useFakeTimers();
     const customTime = new Date("2024-07-01").getTime();
     jest.setSystemTime(customTime);
